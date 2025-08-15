@@ -239,8 +239,16 @@ Google Apps Scriptのエディタで以下の手順でトリガーを設定：
 
 #### clasp のセットアップ
 1. clasp のインストール: `npm install -g @google/clasp`
-2. Google アカウントでログイン: `clasp login`
-3. 詳細は [clasp 公式ドキュメント](https://developers.google.com/apps-script/guides/clasp) を参照
+2. **Google Apps Script API を有効化** ⚠️重要
+   - [Google Apps Script 設定画面](https://script.google.com/home/usersettings) にアクセス
+   - 「Google Apps Script API」を**オン**に変更
+   - この設定をしないと `clasp push` が失敗します
+3. Google アカウントでログイン: `clasp login`（OAuth認証）
+4. **スクリプトIDの設定**
+   - `clasp_dev.json` の `scriptId` を自分のGASプロジェクトIDに変更
+   - スクリプトIDはGASエディタのURLから取得：`https://script.google.com/.../projects/{SCRIPT_ID}/edit`
+
+詳細は [clasp 公式ドキュメント](https://developers.google.com/apps-script/guides/clasp) を参照してください。
 
 #### 開発コマンド
 - `./build.sh -d`: ビルドしてデプロイ

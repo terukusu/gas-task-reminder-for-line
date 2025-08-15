@@ -1,0 +1,13 @@
+# Build and temporary directories
+build/
+tmp/
+
+# clasp working file
+.clasp.json
+
+# Node modules (if using npm packages)
+node_modules/
+
+# OS generated files
+.DS_Store
+Thumbs.db
