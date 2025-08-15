@@ -38,6 +38,42 @@ function checkTaskDeadlines() {
 }
 ```
 
+### 列名をカスタマイズする例
+```javascript
+// 独自の列名を使用する場合
+function checkCustomTaskDeadlines() {
+  const spreadsheetId = SpreadsheetApp.getActiveSpreadsheet().getId();
+  const targetSheets = [
+    { name: 'カスタムタスク', headerRow: 1 }
+  ];
+  
+  // 列名・設定値をカスタマイズ
+  const columnConfig = {
+    // ▼ 列名の設定（スプレッドシートのヘッダー行に記載されている列名）
+    DEADLINE: '締切日',      // デフォルト: '終了予定日'
+    TASK_NAME: 'タスク名',   // デフォルト: '小項目'  
+    STATUS: '進捗',         // デフォルト: 'ステータス'
+    
+    // ▼ ステータス列の値の設定（完了を示すセルの値）
+    COMPLETED_STATUS: '済'  // デフォルト: '完了'
+  };
+  
+  TaskReminderForLINE.checkDeadlinesAndNotify(spreadsheetId, targetSheets, columnConfig);
+}
+```
+
+#### 設定項目の説明
+- **DEADLINE, TASK_NAME, STATUS**: スプレッドシートの**列名**（ヘッダー行の値）
+- **COMPLETED_STATUS**: ステータス列に入力される**完了を示す値**（データ行のセルの値）
+
+例：ステータス列が「進捗」で、完了したタスクのセルに「済」と入力されている場合
+```
+| タスク名 | 締切日     | 進捗 |
+|---------|-----------|------|
+| 資料作成 | 2024/12/25| 済   |  ← この「済」が COMPLETED_STATUS
+| 会議準備 | 2024/12/20| 作業中|
+```
+
 ### トリガー設定
 Google Apps Scriptのエディタで以下の手順でトリガーを設定：
 1. 左メニューの「トリガー」をクリック

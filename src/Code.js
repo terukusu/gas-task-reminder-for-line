@@ -58,7 +58,7 @@ function normalizeTime_(date) {
 }
 
 // メイン関数（引数でカスタマイズ可能）
-function checkDeadlinesAndNotify(spreadsheetId = null, targetSheets = null) {
+function checkDeadlinesAndNotify(spreadsheetId = null, targetSheets = null, columnConfig = null) {
   // スプレッドシートの取得（引数がない場合はアクティブなスプレッドシート）
   const ss = spreadsheetId 
     ? SpreadsheetApp.openById(spreadsheetId)
@@ -71,6 +71,9 @@ function checkDeadlinesAndNotify(spreadsheetId = null, targetSheets = null) {
   
   // シート設定の取得（引数がない場合はデフォルト設定）
   const sheetsToCheck = targetSheets || DEFAULT_TARGET_SHEETS;
+  
+  // 列名設定の取得（引数がない場合はデフォルト設定）
+  const columns = columnConfig ? { ...COLUMN_NAMES, ...columnConfig } : COLUMN_NAMES;
   
   const today = normalizeTime_(new Date());  // 今日の0時0分0秒
   const sevenDaysLater = new Date(today);
@@ -92,9 +95,9 @@ function checkDeadlinesAndNotify(spreadsheetId = null, targetSheets = null) {
       const headers = data[sheetConfig.headerRow - 1];  // 配列インデックスに変換
       
       // 列見出しのインデックスを取得
-      const endDateIndex = headers.indexOf(COLUMN_NAMES.DEADLINE);
-      const itemIndex = headers.indexOf(COLUMN_NAMES.TASK_NAME);
-      const statusIndex = headers.indexOf(COLUMN_NAMES.STATUS);
+      const endDateIndex = headers.indexOf(columns.DEADLINE);
+      const itemIndex = headers.indexOf(columns.TASK_NAME);
+      const statusIndex = headers.indexOf(columns.STATUS);
       
       if (endDateIndex === -1 || itemIndex === -1) {
         console.log(`シート「${sheetConfig.name}」に必要な列が見つかりません`);
@@ -108,7 +111,7 @@ function checkDeadlinesAndNotify(spreadsheetId = null, targetSheets = null) {
         const status = statusIndex !== -1 ? data[i][statusIndex] : '';
 
         // 日付と小項目が存在し、ステータスが「完了」以外の場合のみ処理
-        if (endDate && item && isValidDate_(endDate) && status !== COLUMN_NAMES.COMPLETED_STATUS) {
+        if (endDate && item && isValidDate_(endDate) && status !== columns.COMPLETED_STATUS) {
           const endDateNormalized = normalizeTime_(endDate);  // 終了予定日の時刻をリセット
 
           const itemData = {
