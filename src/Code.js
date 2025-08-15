@@ -136,14 +136,14 @@ function checkDeadlinesAndNotify(spreadsheetId = null, targetSheets = null, colu
   
   // 通知対象がある場合はLINEに送信
   if (upcomingItems.length > 0 || overdueItems.length > 0) {
-    sendLineMessage_(upcomingItems, overdueItems);
+    sendLineMessage_(upcomingItems, overdueItems, spreadsheetId);
   }
 }
 
 
 
 // LINE Messaging APIでメッセージを送信する関数
-function sendLineMessage_(upcomingItems, overdueItems) {
+function sendLineMessage_(upcomingItems, overdueItems, spreadsheetId) {
   let messageText = '📅 タスク期限通知\n';
   messageText += '━━━━━━━━━━━━━━━\n';
   
@@ -191,6 +191,12 @@ function sendLineMessage_(upcomingItems, overdueItems) {
   const totalCount = overdueItems.length + upcomingItems.length;
   messageText += `\n━━━━━━━━━━━━━━━\n`;
   messageText += `📝 合計: ${totalCount} 件のタスク`;
+  
+  // スプレッドシートへのリンクを追加
+  if (spreadsheetId) {
+    const spreadsheetUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}`;
+    messageText += `\n🔗 スプレッドシート: ${spreadsheetUrl}`;
+  }
   
   // 各宛先に送信
   DESTINATIONS.forEach(destination => {
