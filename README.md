@@ -228,9 +228,30 @@ Google Apps Scriptのエディタで以下の手順でトリガーを設定：
 6. 時刻: 午前9時〜10時（任意の時間）
 
 ## 開発
+
+### clasp を使った開発
+このプロジェクトは [clasp](https://github.com/google/clasp) を使ったローカル開発に対応しています。
+
+**clasp とは**: Google Apps Script のコマンドライン開発ツール
+- ローカルエディタでの開発が可能
+- Git によるバージョン管理
+- 開発・本番環境の切り替え
+
+#### clasp のセットアップ
+1. clasp のインストール: `npm install -g @google/clasp`
+2. Google アカウントでログイン: `clasp login`
+3. 詳細は [clasp 公式ドキュメント](https://developers.google.com/apps-script/guides/clasp) を参照
+
+#### 開発コマンド
 - `./build.sh -d`: ビルドしてデプロイ
 - `./build.sh -c`: サーバーとの差分比較
 - `./build.sh -s`: サーバーからローカルに同期
+- `./build.sh -t prod -d`: 本番環境にデプロイ
+
+#### clasp 設定ファイル
+- `clasp_dev.json`: 開発環境用設定
+- `clasp_prod.json`: 本番環境用設定
+- `build.sh` が自動的に適切な設定ファイルを選択
 
 ## ライセンス
 MIT License
