@@ -1,8 +1,8 @@
 #!/bin/bash
-CDIR=$(cd $(dirname $0) && pwd)
-BUILD_DIR=$CDIR/build
-SRC_DIR=$CDIR/src
-TMP_DIR=$CDIR/tmp
+CDIR=$(cd "$(dirname "$0")" && pwd)
+BUILD_DIR="$CDIR/build"
+SRC_DIR="$CDIR/src"
+TMP_DIR="$CDIR/tmp"
 DEPLOY_TARGET=dev
 
 print_usage_exit () {
@@ -18,7 +18,7 @@ print_usage_exit () {
 }
 
 function dl_from_server() {
-   local script_id=$(cat $CDIR/.clasp.json | grep scriptId | cut -d'"' -f 4)
+   local script_id=$(cat "$CDIR/.clasp.json" | grep scriptId | cut -d'"' -f 4)
    local clasp_backup=""
    
    # .clasp.jsonの一時退避（親フォルダの競合回避）
@@ -35,7 +35,7 @@ function dl_from_server() {
 
    # clasp cloneの実行（エラーハンドリング付き）
    local clone_result=0
-   clasp clone --rootDir "$TMP_DIR" $script_id || clone_result=$?
+   clasp clone --rootDir "$TMP_DIR" "$script_id" || clone_result=$?
    
    # .clasp.jsonの復帰（成功・失敗問わず必ず実行）
    if [ -n "$clasp_backup" ] && [ -f "$clasp_backup" ]; then
@@ -87,7 +87,7 @@ if [ "$DEPLOY_TARGET" != "dev" -a "$DEPLOY_TARGET" != "prod" ]; then
   print_usage_exit
 fi
 
-cp clasp_$DEPLOY_TARGET.json .clasp.json
+cp "clasp_$DEPLOY_TARGET.json" .clasp.json
 
 if [ -d "$BUILD_DIR" ]; then
   rm -rf "$BUILD_DIR"/*
@@ -96,7 +96,7 @@ else
 fi
 
 if [ "$BROWSERIFY_FLAG" == "1" ]; then
-  browserify "$ENTRY_POINT" -p gasify -o $BUILD_DIR/Code.js
+  browserify "$ENTRY_POINT" -p gasify -o "$BUILD_DIR/Code.js"
   cp -r "$SRC_DIR/appsscript.json" "$BUILD_DIR/"
 else
   cp -r "$SRC_DIR/"* "$BUILD_DIR/"
